@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Read, explore and discover thoughtful stories on The Daily Chronicle.">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">READ. EXPLORE. DISCOVER.</p>
+      <h1>Ideas worth<br><span>your time.</span></h1>
+      <p class="hero-copy">Discover thoughtful stories, fresh perspectives and ideas from curious minds.</p>
+      <a class="button" href="#latest">Explore articles</a>
+    </section>
+    <section id="latest" class="section">
+      <div class="section-heading">
+        <div><p class="eyebrow">THE JOURNAL</p><h2>Latest stories</h2></div>
+        <span class="muted">Fresh perspectives, every day</span>
+      </div>
+      <div class="empty-state">
+        <h3>Our first stories are on the way.</h3>
+        <p>Published articles will appear here once the blog module is connected.</p>
+      </div>
+    </section>
+  </main>
+  <%- include('../partials/footer') %>
+  <script src="/js/main.js"></script>
+</body>
+</html>
