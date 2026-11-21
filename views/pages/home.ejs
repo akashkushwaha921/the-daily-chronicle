@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Share your photos, moments, stories and experiences with The Daily Chronicle.">
+  <title>
+    <%= title %>
+  </title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+  <%- include('../partials/header') %>
+
+    <main class="container home-page">
+
+      <!-- HERO SECTION -->
+      <section class="hero">
+        <p class="eyebrow">WELCOME TO THE DAILY CHRONICLE</p>
+        <h1>Stories. Photos.<br><span>Beautiful Moments.</span></h1>
+        <p class="hero-copy">
+          Share your thoughts, moments, photos and experiences
+          with a growing community.
+        </p>
+
+        <form class="search-form" action="/search" method="GET">
+          <input type="search" name="q" placeholder="Search posts, photos, topics or users..." aria-label="Search">
+          <button type="submit" class="button">Search</button>
+        </form>
+
+        <div class="trending-topics">
+          <strong>🔥 Trending:</strong>
+          <a href="/categories/nature">Nature</a>
+          <a href="/categories/travel">Travel</a>
+          <a href="/categories/food">Food</a>
+          <a href="/categories/gaming">Gaming</a>
+          <a href="/categories/sports">Sports</a>
+        </div>
+      </section>
+
+      <!-- CATEGORY NAVIGATION -->
+      <section class="category-strip">
+        <a href="/categories/nature" class="category-item">
+          <span class="category-icon">📷</span>Nature
+        </a>
+        <a href="/categories/gaming" class="category-item">
+          <span class="category-icon">🎮</span>Gaming
+        </a>
+        <a href="/categories/entertainment" class="category-item">
+          <span class="category-icon">▶️</span>Entertainment
+        </a>
+        <a href="/categories/lifestyle" class="category-item">
+          <span class="category-icon">💗</span>Lifestyle
+        </a>
+        <a href="/categories/sports" class="category-item">
+          <span class="category-icon">⚽</span>Sports
+        </a>
+        <a href="/categories/travel" class="category-item">
+          <span class="category-icon">✈️</span>Travel
+        </a>
+        <a href="/categories/food" class="category-item">
+          <span class="category-icon">🍴</span>Food
+        </a>
+        <a href="/categories/environment" class="category-item">
+          <span class="category-icon">🌿</span>Environment
+        </a>
+      </section>
+
+      <!-- MAIN CONTENT -->
+      <div class="content-layout">
+
+        <div class="main-content">
+
+          <!-- FEATURED POSTS -->
+          <section class="section" id="latest">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">COMMUNITY HIGHLIGHTS</p>
+                <h2>⭐ Featured Posts</h2>
+              </div>
+              <a href="/explore">View All →</a>
+            </div>
+
+            <% if (posts && posts.length> 0) { %>
+              <div class="posts-grid">
+                <% posts.slice(0, 3).forEach(post=> { %>
+                  <article class="post-card">
+                    <div class="post-content">
+                      <% if (post.category_name) { %>
+                        <span class="post-category">
+                          <%= post.category_name %>
+                        </span>
+                        <% } %>
+
+                          <h3>
+                            <%= post.title %>
+                          </h3>
+
+                          <p>
+                            <%= post.excerpt || 'Discover this story on The Daily Chronicle.' %>
+                          </p>
+
+                          <div class="post-meta">
+                            <span>By <%= post.author_name || 'Community Author' %></span>
+                            <span>
+                              <%= post.published_at ? new Date(post.published_at).toLocaleDateString('en-IN') : '' %>
+                            </span>
+                          </div>
+
+                          <a class="read-more" href="/posts/<%= post.slug %>">
+                            Read Story →
+                          </a>
+                    </div>
+                  </article>
+                  <% }) %>
+              </div>
+              <% } else { %>
+                <div class="empty-state">
+                  <h3>Our first stories are on the way!</h3>
+                  <p>Be the first to share something amazing with our community.</p>
+                </div>
+                <% } %>
+          </section>
+
+          <!-- LATEST POSTS -->
+          <section class="section">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">FRESH FROM THE COMMUNITY</p>
+                <h2>⚡ Latest Posts</h2>
+              </div>
+              <a href="/explore">View All →</a>
+            </div>
+
+            <% if (posts && posts.length> 0) { %>
+              <div class="posts-grid">
+                <% posts.forEach(post=> { %>
+                  <article class="post-card">
+                    <div class="post-content">
+                      <% if (post.category_name) { %>
+                        <span class="post-category">
+                          <%= post.category_name %>
+                        </span>
+                        <% } %>
+
+                          <h3>
+                            <%= post.title %>
+                          </h3>
+
+                          <p>
+                            <%= post.excerpt || 'Discover this story on The Daily Chronicle.' %>
+                          </p>
+
+                          <div class="post-meta">
+                            <span>By <%= post.author_name || 'Community Author' %></span>
+                            <span>
+                              <%= post.published_at ? new Date(post.published_at).toLocaleDateString('en-IN') : '' %>
+                            </span>
+                          </div>
+
+                          <a class="read-more" href="/posts/<%= post.slug %>">
+                            Read Story →
+                          </a>
+                    </div>
+                  </article>
+                  <% }) %>
+              </div>
+              <% } else { %>
+                <div class="empty-state">
+                  <h3>No posts published yet.</h3>
+                  <p>New community posts will appear here.</p>
+                </div>
+                <% } %>
+          </section>
+
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="sidebar">
+
+          <section class="sidebar-card">
+            <div class="sidebar-title">🔥 Trending Now</div>
+            <div class="sidebar-content">
+              <p>Discover what's popular in our community.</p>
+              <a href="/explore" class="read-more">Explore Posts →</a>
+            </div>
+          </section>
+
+          <section class="sidebar-card">
+            <div class="sidebar-title">👥 Our Community</div>
+            <div class="sidebar-content">
+              <h3>Share. Connect. Inspire.</h3>
+              <p>Join our growing community of writers, creators and dreamers.</p>
+              <a href="/auth/register" class="button">Join Now →</a>
+            </div>
+          </section>
+
+          <section class="sidebar-card">
+            <div class="sidebar-title">✉️ Newsletter</div>
+            <div class="sidebar-content">
+              <p>Get the latest stories and updates from our community.</p>
+              <p class="muted">Newsletter subscriptions coming soon.</p>
+            </div>
+          </section>
+
+<section class="sidebar-card stay-inspired-card">
+  <div class="sidebar-title">✨ Stay Inspired</div>
+  <div class="sidebar-content">
+    <h3>Every Story Matters.</h3>
+    <p>
+      Discover fresh ideas, explore inspiring moments
+      and be a part of our growing creative community.
+    </p>
+
+    <div class="inspiration-tags">
+      <span>💡 New Ideas</span>
+      <span>📖 Inspiring Stories</span>
+      <span>🌍 Community Moments</span>
+    </div>
+
+    <a href="/explore" class="read-more">Discover More →</a>
+  </div>
+</section>
+
+
+        </aside>
+
+      </div>
+
+      <!-- COMMUNITY STATISTICS -->
+      <section class="stats-bar">
+        <div class="stat-item">
+          <strong>✍️</strong>
+          <span>Community Posts</span>
+        </div>
+        <div class="stat-item">
+          <strong>👥</strong>
+          <span>Active Members</span>
+        </div>
+        <div class="stat-item">
+          <strong>👁️</strong>
+          <span>Stories & Moments</span>
+        </div>
+        <div class="stat-item">
+          <strong>🏆</strong>
+          <span>Contributors</span>
+        </div>
+      </section>
+
+    </main>
+
+    <%- include('../partials/footer') %>
+
+      <script src="/js/main.js"></script>
+</body>
+
+</html>

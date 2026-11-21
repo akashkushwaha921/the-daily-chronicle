@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Explore categories and discover the latest community stories on The Daily Chronicle.">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+    <main class="explore-page">
+
+            <!-- Explore Hero -->
+        <section class="hero explore-hero">
+            <span class="hero-label">DISCOVER SOMETHING NEW</span>
+        
+            <h1>Explore <span>Stories.</span></h1>
+        
+            <p>
+                Discover ideas, interests and stories shared by our community.
+                Find something that inspires you.
+            </p>
+        </section>
+
+
+            <!-- Categories Section -->
+            <section class="section explore-categories">
+                <div class="container">
+
+                    <div class="section-heading">
+                        <div>
+                            <span class="section-label">BROWSE BY INTEREST</span>
+                            <h2>Explore Categories</h2>
+                        </div>
+                    </div>
+
+                    <% if (categories.length===0) { %>
+
+                        <div class="empty-state">
+                            <h3>No categories available</h3>
+                            <p>Categories will appear here soon.</p>
+                        </div>
+
+                        <% } else { %>
+
+                            <div class="posts-grid">
+
+                                <% categories.forEach(category=> { %>
+
+                                    <a href="/categories/<%= category.slug %>" class="post-card explore-category-card">
+                                        <div class="post-content">
+                                            <span class="post-category">
+                                                Explore Category
+                                            </span>
+
+                                            <h3>
+                                                <%= category.name %>
+                                            </h3>
+
+                                            <p>
+                                                <%= category.post_count %>
+                                                    <%= category.post_count===1 ? 'published post' : 'published posts'
+                                                        %>
+                                            </p>
+
+                                            <span class="read-more">Explore Now →</span>
+                                        </div>
+                                    </a>
+
+                                    <% }) %>
+
+                            </div>
+
+                            <% } %>
+
+                </div>
+            </section>
+
+            <!-- Latest Community Stories -->
+            <section class="section explore-latest" id="latest">
+                <div class="container">
+
+                    <div class="section-heading">
+                        <div>
+                            <span class="section-label">FRESH FROM OUR COMMUNITY</span>
+                            <h2>Latest Stories</h2>
+                        </div>
+
+                        <form method="GET" action="/explore" class="category-sort">
+                              <select name="sort" data-auto-submit>
+                                <option value="latest" <%=sort==='latest' ? 'selected' : '' %>>
+                                    Latest First
+                                </option>
+
+                                <option value="oldest" <%=sort==='oldest' ? 'selected' : '' %>>
+                                    Oldest First
+                                </option>
+                            </select>
+                        </form>
+                    </div>
+
+                    <% if (posts.length===0) { %>
+
+                        <div class="empty-state">
+                            <h3>No published stories yet</h3>
+                            <p>Be the first to share a story with our community.</p>
+                            <a href="/posts/new" class="button">Write a Post</a>
+                        </div>
+
+                        <% } else { %>
+
+                            <div class="posts-grid">
+
+                                <% posts.forEach(post=> { %>
+
+                                    <article class="post-card">
+
+                                        <div class="post-content">
+
+                                            <span class="post-category">
+                                                <%= post.category_name || 'Community' %>
+                                            </span>
+
+                                            <h3>
+                                                <%= post.title %>
+                                            </h3>
+
+                                            <p>
+                                                <%= post.excerpt %>
+                                            </p>
+
+                                            <div class="post-meta">
+                                                <span>By <%= post.author_name || 'Community Author' %></span>
+                                            </div>
+
+                                            <a href="/posts/<%= post.slug %>" class="read-more">
+                                                Read More →
+                                            </a>
+
+                                        </div>
+
+                                    </article>
+
+                                    <% }) %>
+
+                            </div>
+
+                            <% } %>
+
+                </div>
+            </section>
+
+        </main>
+
+        <%- include('../partials/footer') %>
+
+            <script src="/js/main.js"></script>
+
+</body>
+
+</html>

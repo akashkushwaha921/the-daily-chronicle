@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        <%= title %> | The Daily Chronicle
+    </title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        body {
+            background: #f4f6fa;
+        }
+
+        .review-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .review-header h1 {
+            color: #172033;
+        }
+
+        .back-link {
+            color: white;
+            background: #172033;
+            padding: 10px 16px;
+            border-radius: 7px;
+            text-decoration: none;
+        }
+
+        .review-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #e8ebf1;
+        }
+
+        .article-category {
+            color: #2563eb;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .article-title {
+            font-size: 34px;
+            line-height: 1.3;
+            color: #172033;
+            margin-bottom: 15px;
+            overflow-wrap: anywhere;
+        }
+
+        .article-meta {
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            text-transform: capitalize;
+            background: #fef3c7;
+            color: #92400e;
+            margin-bottom: 20px;
+        }
+
+        .article-excerpt {
+            margin: 15px 0;
+            color: #475569;
+            line-height: 1.7;
+        }
+
+        .article-content {
+            margin-top: 20px;
+            font-size: 17px;
+            line-height: 1.9;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            color: #334155;
+        }
+
+        .article-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .article-gallery img {
+            display: block;
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .review-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .publish-btn,
+        .delete-btn {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 7px;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .publish-btn {
+            background: #16794a;
+        }
+
+        .delete-btn {
+            background: #dc2626;
+        }
+
+        .published-message {
+            color: #166534;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .review-card {
+                padding: 20px;
+            }
+
+            .article-title {
+                font-size: 27px;
+            }
+
+            .article-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .review-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+        <main class="review-container">
+
+            <header class="review-header">
+                <h1>Article Review</h1>
+
+                <a href="/admin/articles" class="back-link">
+                    ← Back to Articles
+                </a>
+            </header>
+
+            <article class="review-card">
+
+                <% if (post.category_name) { %>
+                    <div class="article-category">
+                        <%= post.category_name %>
+                    </div>
+                    <% } %>
+
+                        <h2 class="article-title">
+                            <%= post.title %>
+                        </h2>
+
+                        <div class="article-meta">
+                            By <%= post.author_name || 'Unknown Author' %>
+                                |
+                                Submitted:
+                                <%= new Date(post.created_at).toLocaleString('en-IN') %>
+                        </div>
+
+                        <span class="status">
+                            <%= post.status %>
+                        </span>
+
+                        <% if (post.excerpt) { %>
+                            <div class="article-excerpt">
+                                <strong>
+                                    <%= post.excerpt %>
+                                </strong>
+                            </div>
+                            <% } %>
+
+                                <% if (images && images.length> 0) { %>
+                                    <div class="article-gallery">
+                                        <% images.forEach(image=> { %>
+                                            <div>
+                                                <img src="<%= image.image_path %>" alt="<%= post.title %>"
+                                                    loading="lazy">
+                                            </div>
+                                            <% }) %>
+                                    </div>
+                                    <% } %>
+
+                                        <div class="article-content">
+                                            <%= post.content %>
+                                        </div>
+
+                                        <div class="review-actions">
+
+                                            <% if (post.status==='pending' || post.status==='draft' ) { %>
+
+                                                <form action="/admin/articles/<%= post.id %>/publish" method="POST">
+
+                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                                                    <button type="submit" class="publish-btn">
+                                                        Publish Article
+                                                    </button>
+                                                </form>
+
+                                                <% } else { %>
+
+                                                    <p class="published-message">
+                                                        This article is already published.
+                                                    </p>
+
+                                                    <% } %>
+
+                                                        <form action="/admin/articles/<%= post.id %>/delete"
+                                                            method="POST" class="delete-form"
+                                                            data-confirm="Are you sure you want to permanently delete this article?">
+
+                                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                                                            <button type="submit" class="delete-btn">
+                                                                Delete Article
+                                                            </button>
+                                                        </form>
+
+                                        </div>
+
+            </article>
+
+        </main>
+
+        <script src="/js/admin.js" defer></script>
+
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>

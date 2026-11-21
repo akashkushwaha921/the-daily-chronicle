@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create your account on The Daily Chronicle.">
+    <title>
+        <%= title %> | The Daily Chronicle
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        /* =====================================
+   THE DAILY CHRONICLE - REGISTER DESIGN
+===================================== */
+
+        .auth-wrapper {
+            width: 100%;
+            max-width: 480px;
+            margin: 55px auto;
+            padding: 40px 38px;
+            background: #ffffff;
+            border: 1px solid #e7ebf2;
+            border-radius: 20px;
+            box-shadow: 0 15px 45px rgba(25, 45, 75, 0.09);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #29466f, #6688b5);
+        }
+
+        .auth-wrapper .eyebrow {
+            color: #52739e;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .auth-wrapper h1 {
+            margin: 8px 0 12px;
+            color: #192e4b;
+            font-size: 34px;
+            font-weight: 800;
+            letter-spacing: -1.2px;
+        }
+
+        .auth-description {
+            margin-bottom: 27px;
+            color: #7b8798;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .auth-error {
+            margin-bottom: 20px;
+            padding: 14px 16px;
+            border: 1px solid #f2caca;
+            border-left: 4px solid #d94b4b;
+            border-radius: 9px;
+            background: #fff4f4;
+            color: #a32222;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .auth-wrapper .form-group {
+            margin-bottom: 19px;
+        }
+
+        .auth-wrapper label {
+            display: block;
+            margin-bottom: 9px;
+            color: #293d59;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .auth-wrapper input {
+            display: block;
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 15px;
+            border: 1px solid #dce3ed;
+            border-radius: 10px;
+            background: #f9fbfd;
+            color: #263b56;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .auth-wrapper input::placeholder {
+            color: #a1aab8;
+        }
+
+        .auth-wrapper input:focus {
+            background: #ffffff;
+            border-color: #456a9c;
+            box-shadow: 0 0 0 4px rgba(69, 106, 156, 0.10);
+        }
+
+        .auth-submit {
+            width: 100%;
+            min-height: 50px;
+            margin-top: 9px;
+            border: none;
+            border-radius: 10px;
+            background: #29466f;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .auth-submit:hover {
+            background: #1d3555;
+            box-shadow: 0 7px 18px rgba(41, 70, 111, 0.20);
+            transform: translateY(-2px);
+        }
+
+        .auth-switch {
+            margin-top: 25px;
+            padding-top: 21px;
+            border-top: 1px solid #edf0f4;
+            color: #8491a3;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .auth-switch a {
+            color: #29466f;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .auth-switch a:hover {
+            color: #5279aa;
+            text-decoration: underline;
+        }
+
+        /* Mobile Responsive */
+
+        @media (max-width: 600px) {
+            .auth-wrapper {
+                max-width: 100%;
+                margin: 30px auto;
+                padding: 30px 22px;
+                border-radius: 15px;
+            }
+
+            .auth-wrapper h1 {
+                font-size: 29px;
+            }
+
+            .auth-description {
+                margin-bottom: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+        <main class="container">
+            <section class="auth-wrapper">
+
+                <p class="eyebrow">JOIN OUR COMMUNITY</p>
+                <h1>Create Account</h1>
+                <p class="auth-description">
+                    Sign up and start sharing your stories, photos and moments.
+                </p>
+
+                <% if (error) { %>
+                    <div class="auth-error" role="alert">
+                        <%= error %>
+                    </div>
+                    <% } %>
+
+                        <form action="/auth/register" method="POST">
+
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="name" value="<%= formData.name || '' %>"
+                                    placeholder="Enter your full name" maxlength="120" autocomplete="name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" value="<%= formData.email || '' %>"
+                                    placeholder="Enter your email" maxlength="255" autocomplete="email" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password"
+                                    placeholder="Create a password (minimum 8 characters)" minlength="8" maxlength="72"
+                                    autocomplete="new-password" required>
+                            </div>
+
+                            <button type="submit" class="button auth-submit">
+                                Create My Account
+                            </button>
+
+                        </form>
+
+                        <p class="auth-switch">
+                            Already have an account?
+                            <a href="/auth/login">Sign in</a>
+                        </p>
+
+            </section>
+        </main>
+
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>

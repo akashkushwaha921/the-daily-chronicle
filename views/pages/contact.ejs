@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        <%= title %>
+    </title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .contact-section {
+            max-width: 760px;
+            margin: 60px auto;
+            padding: 35px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .contact-section h1 {
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .contact-description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .contact-form label {
+            display: block;
+            margin: 18px 0 7px;
+            font-weight: 600;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font: inherit;
+            box-sizing: border-box;
+        }
+
+        .contact-form textarea {
+            min-height: 160px;
+            resize: vertical;
+        }
+
+        .contact-form button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border: none;
+            border-radius: 7px;
+            background: #222;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .contact-form button:hover {
+            background: #444;
+        }
+
+        .contact-alert {
+            padding: 13px;
+            margin-bottom: 18px;
+            border-radius: 7px;
+        }
+
+        .contact-error {
+            background: #ffe8e8;
+            color: #a00000;
+        }
+
+        .contact-success {
+            background: #e6f7e9;
+            color: #176b2c;
+        }
+
+        .contact-honeypot {
+            position: absolute;
+            left: -9999px;
+        }
+
+        @media (max-width: 600px) {
+            .contact-section {
+                margin: 25px 15px;
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+        <main class="contact-section">
+
+            <h1>Contact Us</h1>
+
+            <p class="contact-description">
+                We'd love to hear from you.
+                Send us your questions, suggestions or feedback.
+            </p>
+
+            <% if (error) { %>
+                <div class="contact-alert contact-error">
+                    <%= error %>
+                </div>
+                <% } %>
+
+                    <% if (success) { %>
+                        <div class="contact-alert contact-success">
+                            <%= success %>
+                        </div>
+                        <% } %>
+
+                            <form action="/contact" method="POST" class="contact-form">
+
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                                <div class="contact-honeypot" aria-hidden="true">
+                                    <label for="website">Leave this field empty</label>
+                                    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                                </div>
+
+                                <label for="name">Your Name</label>
+                                <input type="text" id="name" name="name" maxlength="120"
+                                    value="<%= formData.name || '' %>" placeholder="Enter your name" required>
+
+                                <label for="email">Your Email</label>
+                                <input type="email" id="email" name="email" maxlength="255"
+                                    value="<%= formData.email || '' %>" placeholder="Enter your email address" required>
+
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" maxlength="150"
+                                    value="<%= formData.subject || '' %>" placeholder="Enter subject" required>
+
+                                <label for="message">Your Message</label>
+                                <textarea id="message" name="message" maxlength="5000"
+                                    placeholder="Write your message here..."
+                                    required><%= formData.message || '' %></textarea>
+
+                                <button type="submit">Send Message</button>
+
+                            </form>
+
+        </main>
+
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>

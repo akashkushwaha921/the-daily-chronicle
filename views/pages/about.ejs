@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Learn about The Daily Chronicle, a community platform for sharing stories and experiences.">
+
+    <title>
+        <%= title %>
+    </title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+        <main class="container">
+
+            <section class="hero">
+                <p class="eyebrow">OUR STORY</p>
+
+                <h1>
+                    About The Daily
+                    <br>
+                    <span>Chronicle.</span>
+                </h1>
+
+                <p class="hero-copy">
+                    A community where every voice matters and every story
+                    deserves to be shared.
+                </p>
+            </section>
+
+            <section class="section">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">WHO WE ARE</p>
+                        <h2>Our Mission</h2>
+                    </div>
+                </div>
+
+                <p>
+                    The Daily Chronicle is a community-driven platform
+                    created for people who love sharing stories, ideas,
+                    photographs and experiences.
+                </p>
+
+                <p>
+                    Our mission is to bring people together through
+                    meaningful content and give everyone a place to
+                    express their creativity.
+                </p>
+            </section>
+
+            <section class="section">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">WHAT WE BELIEVE</p>
+                        <h2>Our Values</h2>
+                    </div>
+                </div>
+
+                <div class="posts-grid">
+
+                    <article class="post-card">
+                        <div class="post-content">
+                            <h3>Community First</h3>
+                            <p>We believe everyone has a story worth sharing.</p>
+                        </div>
+                    </article>
+
+                    <article class="post-card">
+                        <div class="post-content">
+                            <h3>Creativity</h3>
+                            <p>We encourage original ideas and creative expression.</p>
+                        </div>
+                    </article>
+
+                    <article class="post-card">
+                        <div class="post-content">
+                            <h3>Authenticity</h3>
+                            <p>We value genuine stories and meaningful experiences.</p>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">BE PART OF US</p>
+                        <h2>Share Your Story</h2>
+                    </div>
+                </div>
+
+                <p>
+                    Have something interesting to share? Join our community
+                    and let your story reach others.
+                </p>
+
+                <a href="/posts/new" class="button">Write a Post →</a>
+            </section>
+
+        </main>
+
+        <%- include('../partials/footer') %>
+
+            <script src="/js/main.js"></script>
+
+</body>
+
+</html>

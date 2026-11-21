@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %> | The Daily Chronicle
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .reports-page {
+            max-width: 1150px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .back-dashboard-btn {
+            display: inline-block;
+            margin-bottom: 22px;
+            padding: 10px 18px;
+            background: #29466f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+        }
+
+        .back-dashboard-btn:hover {
+            background: #1b304d;
+        }
+
+        .reports-page h1 {
+            margin-bottom: 25px;
+        }
+
+        .report-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .report-card h3 {
+            margin: 0 0 12px;
+        }
+
+        .report-card p {
+            margin: 8px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .report-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: capitalize;
+            background: #eee;
+        }
+
+        .status-pending {
+            background: #fff0c2;
+            color: #805900;
+        }
+
+        .status-resolved {
+            background: #d9f5df;
+            color: #17652b;
+        }
+
+        .status-dismissed {
+            background: #f8dddd;
+            color: #922b2b;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .report-actions button {
+            border: none;
+            padding: 9px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+
+        .resolve-btn {
+            background: #218838;
+        }
+
+        .dismiss-btn {
+            background: #c82333;
+        }
+
+        .empty-reports {
+            padding: 30px;
+            text-align: center;
+            background: #fff;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .reports-page {
+                padding: 12px;
+            }
+
+            .report-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+        <main class="reports-page">
+
+            <h1>Manage Reports</h1>
+            <a href="/admin" class="back-dashboard-btn">
+                ← Back to Dashboard
+            </a>
+
+            <% if (reports.length===0) { %>
+
+                <div class="empty-reports">
+                    <h3>No reports found.</h3>
+                    <p>There are currently no submitted reports.</p>
+                </div>
+
+                <% } else { %>
+
+                    <% reports.forEach(report=> { %>
+
+                        <section class="report-card">
+
+                            <h3>Report #<%= report.id %>
+                            </h3>
+
+                            <p>
+                                <strong>Reported Content:</strong>
+                                <% if (report.post_id) { %>
+                                    Article
+                                    <% } else { %>
+                                        Comment
+                                        <% } %>
+                            </p>
+
+                            <% if (report.post_id) { %>
+                                <p>
+                                    <strong>Article Title:</strong>
+                                    <%= report.post_title || 'Article no longer available' %>
+                                </p>
+
+                                <p>
+                                    <strong>Article Author:</strong>
+                                    <%= report.post_author_name || 'Unknown' %>
+                                </p>
+                                <% } else { %>
+                                    <p>
+                                        <strong>Comment:</strong>
+                                        <%= report.comment_content || 'Comment no longer available' %>
+                                    </p>
+
+                                    <p>
+                                        <strong>Comment Author:</strong>
+                                        <%= report.comment_author_name || 'Unknown' %>
+                                    </p>
+                                    <% } %>
+
+                                        <p>
+                                            <strong>Reported By:</strong>
+                                            <%= report.reporter_name || 'Unknown' %>
+                                                (<%= report.reporter_email || 'No email' %>)
+                                        </p>
+
+                                        <p>
+                                            <strong>Reason:</strong>
+                                            <%= report.reason %>
+                                        </p>
+
+                                        <p>
+                                            <strong>Additional Details:</strong>
+                                            <%= report.details || 'No additional details provided.' %>
+                                        </p>
+
+                                        <p>
+                                            <strong>Submitted:</strong>
+                                            <%= new Date(report.created_at).toLocaleString() %>
+                                        </p>
+
+                                        <p>
+                                            <strong>Status:</strong>
+                                            <span class="report-status status-<%= report.status %>">
+                                                <%= report.status %>
+                                            </span>
+                                        </p>
+
+                                        <% if (report.status==='pending' ) { %>
+
+                                            <div class="report-actions">
+
+                                                <form method="POST" action="/admin/reports/<%= report.id %>/resolve">
+
+                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                                                    <button type="submit" class="resolve-btn">
+                                                        Resolve
+                                                    </button>
+                                                </form>
+
+                                                <form method="POST" action="/admin/reports/<%= report.id %>/dismiss">
+
+                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                                                    <button type="submit" class="dismiss-btn">
+                                                        Dismiss
+                                                    </button>
+                                                </form>
+
+                                            </div>
+
+                                            <% } %>
+
+                        </section>
+
+                        <% }); %>
+
+                            <% } %>
+
+        </main>
+
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>

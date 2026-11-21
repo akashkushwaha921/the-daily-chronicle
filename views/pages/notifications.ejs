@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | The Daily Chronicle</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+        <main class="container dashboard-page">
+
+            <section class="dashboard-heading">
+                <div>
+                    <p class="eyebrow">YOUR UPDATES</p>
+                    <h1>Notifications</h1>
+
+                    <% if (currentUser && currentUser.role==='admin' ) { %>
+                        <a href="/admin" class="button" style="margin-top: 12px; display: inline-block;">
+                            ← Back to Dashboard
+                        </a>
+                        <% } %>
+
+                            <p>Stay updated with activity on The Daily Chronicle.</p>
+                </div>
+
+                <% if (notifications.some(notification=> !notification.is_read)) { %>
+                    <form action="/notifications/read-all" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit" class="button">
+                            Mark All as Read
+                        </button>
+                    </form>
+                    <% } %>
+            </section>
+
+            <section class="dashboard-content">
+
+                <% if (!notifications || notifications.length===0) { %>
+
+                    <div class="empty-state">
+                        <h3>No notifications yet</h3>
+                        <p>Your notifications will appear here when there is new activity.</p>
+                    </div>
+
+                    <% } else { %>
+
+                        <div class="dashboard-post-list">
+
+                            <% notifications.forEach(notification=> { %>
+
+                                <article class="dashboard-post">
+
+                                    <div class="dashboard-post-info">
+
+                                        <h3>
+                                            <a href="/notifications/<%= notification.id %>/open"
+                                                style="color: inherit; text-decoration: none;">
+                                                <%= notification.message %>
+                                            </a>
+
+                                            <% if (!notification.is_read) { %>
+                                                <span class="post-status status-pending">New</span>
+                                                <% } %>
+                                        </h3>
+
+                                        <p>
+                                            <%= new Date(notification.created_at).toLocaleString('en-IN') %>
+                                        </p>
+
+                                    </div>
+
+                                    <div class="dashboard-post-actions">
+
+                                        <% if (!notification.is_read) { %>
+                                            <form action="/notifications/<%= notification.id %>/read" method="POST">
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                <button type="submit" class="button">
+                                                    Mark as Read
+                                                </button>
+                                            </form>
+                                            <% } %>
+
+                                                <form action="/notifications/<%= notification.id %>/delete"
+                                                    method="POST">
+                                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                                    <button type="submit" class="button button-danger">
+                                                        Delete
+                                                    </button>
+                                                </form>
+
+                                    </div>
+
+                                </article>
+
+                                <% }) %>
+
+                        </div>
+
+                        <% } %>
+
+            </section>
+
+        </main>
+
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>

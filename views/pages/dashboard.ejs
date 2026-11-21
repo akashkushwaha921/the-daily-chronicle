@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage your stories and track their publication status.">
+    <title><%= title || 'My Dashboard' %> | The Daily Chronicle</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+    <main class="container dashboard-page">
+
+        <section class="dashboard-heading">
+            <div>
+                <p class="eyebrow">YOUR SPACE</p>
+                <h1>My Dashboard</h1>
+                <p>Manage your stories and track their publication status.</p>
+            </div>
+
+            <a href="/posts/new" class="button">+ Write a Post</a>
+        </section>
+
+        <% if (currentUser && currentUser.role === 'admin') { %>
+
+            <section class="dashboard-content">
+                <h2>Admin Panel - Pending Posts</h2>
+
+                <% if (pendingPosts.length === 0) { %>
+                    <div class="empty-state">
+                        <h3>No pending posts</h3>
+                        <p>All submitted posts have been reviewed.</p>
+                    </div>
+                <% } else { %>
+
+                    <div class="dashboard-post-list">
+                        <% pendingPosts.forEach(post => { %>
+                            <article class="dashboard-post">
+
+                                <div class="dashboard-post-info">
+                                    <h3><%= post.title %></h3>
+                                    <p>
+                                        By <%= post.author_name || 'Community Author' %>
+                                        · <%= post.category_name || 'Uncategorized' %>
+                                    </p>
+                                </div>
+
+                                <form action="/dashboard/posts/<%= post.id %>/approve" method="POST">
+                                    <button type="submit" class="button">
+                                        Approve Post
+                                    </button>
+                                </form>
+
+                            </article>
+                        <% }) %>
+                    </div>
+
+                <% } %>
+            </section>
+
+        <% } %>
+
+        <!-- Following Feed -->
+        <section class="dashboard-content">
+            <h2>📰 Following Feed</h2>
+            <p>Latest stories from authors you follow.</p>
+
+            <% if (!followingPosts || followingPosts.length === 0) { %>
+
+                <div class="empty-state">
+                    <h3>No stories in your feed yet</h3>
+                    <p>Follow your favourite authors to see their latest stories here.</p>
+                    <a href="/explore" class="button">Explore Authors</a>
+                </div>
+
+            <% } else { %>
+
+                <div class="dashboard-post-list">
+                    <% followingPosts.forEach(post => { %>
+
+                        <article class="dashboard-post">
+
+                            <div class="dashboard-post-info">
+                                <h3>
+                                    <a href="/posts/<%= post.slug %>">
+                                        <%= post.title %>
+                                    </a>
+                                </h3>
+
+                                <p>
+                                    By
+                                    <a href="/author/<%= post.author_id %>">
+                                        <%= post.author_name || 'Community Author' %>
+                                    </a>
+                                    · <%= post.category_name || 'Uncategorized' %>
+                                </p>
+
+                                <% if (post.published_at) { %>
+                                    <p>
+                                        <%= new Date(post.published_at).toLocaleDateString('en-IN') %>
+                                    </p>
+                                <% } %>
+                            </div>
+
+                            <a href="/posts/<%= post.slug %>" class="button">
+                                Read Story
+                            </a>
+
+                        </article>
+
+                    <% }) %>
+                </div>
+
+            <% } %>
+        </section>
+
+        <!-- My Posts -->
+        <section class="dashboard-content">
+            <h2>My Posts</h2>
+
+            <% if (posts.length === 0) { %>
+
+                <div class="empty-state">
+                    <h3>No posts yet</h3>
+                    <p>Your stories will appear here after you submit them.</p>
+                    <a href="/posts/new" class="button">Create Your First Post</a>
+                </div>
+
+            <% } else { %>
+
+                <div class="dashboard-post-list">
+                    <% posts.forEach(post => { %>
+
+                        <article class="dashboard-post">
+
+                            <div class="dashboard-post-info">
+                                <h3><%= post.title %></h3>
+
+                                <p>
+                                    <%= post.category_name || 'Uncategorized' %>
+                                    ·
+                                    <%= new Date(post.created_at).toLocaleDateString('en-IN') %>
+                                </p>
+                            </div>
+
+                            <div class="dashboard-post-actions">
+
+                                <span class="post-status status-<%= post.status %>">
+                                    <%= post.status.charAt(0).toUpperCase() + post.status.slice(1) %>
+                                </span>
+
+                                <a href="/posts/<%= post.id %>/edit" class="button">
+                                    Edit Post
+                                </a>
+
+                                <form action="/posts/<%= post.id %>/delete"
+                                      method="POST"
+                                      class="delete-post-form"
+                                      data-confirm-delete>
+
+                                    <button type="submit" class="button button-danger">
+                                        Delete Post
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </article>
+
+                    <% }) %>
+                </div>
+
+            <% } %>
+        </section>
+
+        <!-- My Likes -->
+        <section class="dashboard-content">
+            <h2>❤️ My Likes</h2>
+
+            <% if (likedPosts.length === 0) { %>
+
+                <div class="empty-state">
+                    <h3>No liked articles yet</h3>
+                    <p>Articles you like will appear here.</p>
+                </div>
+
+            <% } else { %>
+
+                <div class="dashboard-post-list">
+                    <% likedPosts.forEach(post => { %>
+
+                        <article class="dashboard-post">
+
+                            <div class="dashboard-post-info">
+                                <h3>
+                                    <a href="/posts/<%= post.slug %>">
+                                        <%= post.title %>
+                                    </a>
+                                </h3>
+
+                                <p>
+                                    By <%= post.author_name || 'Community Author' %>
+                                    · <%= post.category_name || 'Uncategorized' %>
+                                </p>
+                            </div>
+
+                            <a href="/posts/<%= post.slug %>" class="button">
+                                Read Story
+                            </a>
+
+                        </article>
+
+                    <% }) %>
+                </div>
+
+            <% } %>
+        </section>
+
+        <!-- My Bookmarks -->
+        <section class="dashboard-content">
+            <h2>🔖 My Bookmarks</h2>
+
+            <% if (bookmarkedPosts.length === 0) { %>
+
+                <div class="empty-state">
+                    <h3>No bookmarked articles yet</h3>
+                    <p>Articles you bookmark will appear here.</p>
+                </div>
+
+            <% } else { %>
+
+                <div class="dashboard-post-list">
+                    <% bookmarkedPosts.forEach(post => { %>
+
+                        <article class="dashboard-post">
+
+                            <div class="dashboard-post-info">
+                                <h3>
+                                    <a href="/posts/<%= post.slug %>">
+                                        <%= post.title %>
+                                    </a>
+                                </h3>
+
+                                <p>
+                                    By <%= post.author_name || 'Community Author' %>
+                                    · <%= post.category_name || 'Uncategorized' %>
+                                </p>
+                            </div>
+
+                            <div class="dashboard-post-actions">
+
+                                <a href="/posts/<%= post.slug %>" class="button">
+                                    Read Story
+                                </a>
+
+                                <button type="button"
+                                        class="button remove-bookmark-button"
+                                        data-post-id="<%= post.id %>">
+                                    Remove Bookmark
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                    <% }) %>
+                </div>
+
+            <% } %>
+        </section>
+
+    </main>
+
+    <%- include('../partials/footer') %>
+
+    <script src="/js/main.js"></script>
+
+</body>
+</html>

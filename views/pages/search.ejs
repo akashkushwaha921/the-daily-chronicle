@@ -1,0 +1,155 @@
+<%- include('../partials/header') %>
+
+    <main class="container section search-page">
+
+        <div class="section-heading">
+            <span class="section-label">DISCOVER STORIES</span>
+            <h1>Search Results</h1>
+
+            <% if (q) { %>
+                <p>Showing results for: <strong>"<%= q %>"</strong></p>
+                <% } else { %>
+                    <p>Search for articles, topics and stories.</p>
+                    <% } %>
+        </div>
+
+    <form class="search-form" action="/search" method="GET" id="liveSearchForm">
+        <div class="live-search-wrapper">
+            <input type="search" name="q" id="liveSearchInput" value="<%= q %>" placeholder="Search articles or topics..."
+                aria-label="Search articles" autocomplete="off">
+    
+            <div id="searchSuggestions" class="search-suggestions" hidden></div>
+        </div>
+    
+        <button type="submit" class="button">Search</button>
+    </form>
+
+
+        <% if (!q) { %>
+
+            <p class="empty-state">
+                Enter a keyword to discover stories.
+            </p>
+
+            <% } else if (posts.length===0) { %>
+
+                <div class="empty-state">
+                    <h2>No stories found</h2>
+                    <p>Try another keyword or explore our categories.</p>
+                    <a href="/explore" class="button">Explore Categories</a>
+                </div>
+
+                <% } else { %>
+
+                    <div class="section-heading">
+                        <div>
+                            <h2>
+                                <%= totalPosts %> Stories Found
+                            </h2>
+                            <p>
+                                Page <%= currentPage %> of <%= totalPages %>
+                            </p>
+                        </div>
+
+                        <form method="GET" action="/search" class="category-sort">
+                            <input type="hidden" name="q" value="<%= q %>">
+
+                            <select name="sort" onchange="this.form.submit()">
+                                <option value="latest" <%=sort==='latest' ? 'selected' : '' %>>
+                                    Latest First
+                                </option>
+
+                                <option value="oldest" <%=sort==='oldest' ? 'selected' : '' %>>
+                                    Oldest First
+                                </option>
+                            </select>
+                        </form>
+                    </div>
+
+
+                    <div class="posts-grid">
+
+                        <% posts.forEach(post=> { %>
+
+                            <article class="post-card">
+                                <div class="post-content">
+
+                                    <% if (post.category_name) { %>
+                                        <span class="post-category">
+                                            <%= post.category_name %>
+                                        </span>
+                                        <% } %>
+
+                                            <h3>
+                                                <a href="/posts/<%= post.slug %>">
+                                                    <%= post.title %>
+                                                </a>
+                                            </h3>
+
+                                            <p>
+                                                <%= post.excerpt %>
+                                            </p>
+
+                                            <div class="post-meta">
+                                                <span>
+                                                    By <%= post.author_name || 'Unknown Author' %>
+                                                </span>
+                                            </div>
+
+                                            <a href="/posts/<%= post.slug %>" class="read-more">
+                                                Read Article →
+                                            </a>
+
+                                </div>
+                            </article>
+
+                            <% }) %>
+
+                    </div>
+
+                    <!-- PAGINATION -->
+                    <% if (totalPages> 1) { %>
+
+                        <nav class="pagination" aria-label="Search results pages">
+
+                            <% if (currentPage> 1) { %>
+                                href="/search?q=<%= encodeURIComponent(q) %>&sort=<%= sort %>&page=<%= currentPage - 1
+                                            %>"
+                                            class="pagination-link">
+                                            &larr; Previous
+                                            </a>
+                                            <% } %>
+
+                                                <% for (let page=1; page <=totalPages; page++) { %>
+
+                                                    href="/search?q=<%= encodeURIComponent(q) %>&sort=<%= sort %>&page=
+                                                            <%= page %>"
+                                                                class="pagination-link <%= page===currentPage ? 'active'
+                                                                    : '' %>"
+                                                                    <%=page===currentPage ? 'aria-current="page"' : ''
+                                                                        %>
+                                                                        >
+                                                                        <%= page %>
+                                                                            </a>
+
+                                                                            <% } %>
+
+                                                                                <% if (currentPage < totalPages) { %>
+                                                                                    href="/search?q=<%=
+                                                                                        encodeURIComponent(q) %>&sort=
+                                                                                        <%= sort %>&page=<%= currentPage
+                                                                                                + 1 %>"
+                                                                                                class="pagination-link">
+                                                                                                Next &rarr;
+                                                                                                </a>
+                                                                                                <% } %>
+
+                        </nav>
+
+                        <% } %>
+
+                            <% } %>
+
+    </main>
+
+    <%- include('../partials/footer') %>

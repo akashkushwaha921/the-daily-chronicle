@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        <%= title %> | The Daily Chronicle
+    </title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .author-page {
+            max-width: 1050px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .author-card {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            padding: 42px;
+            margin-bottom: 45px;
+            background: #fff;
+            border: 1px solid #e9eaf0;
+            border-radius: 20px;
+            box-shadow: 0 12px 35px rgba(20, 25, 50, 0.07);
+            overflow: hidden;
+        }
+
+        .author-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #3156a3, #829ce0);
+        }
+
+        .author-photo,
+        .author-placeholder {
+            width: 155px;
+            height: 155px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .author-photo {
+            object-fit: cover;
+            border: 5px solid #fff;
+            box-shadow: 0 0 0 3px #e4eaff, 0 8px 22px rgba(0, 0, 0, 0.12);
+        }
+
+        .author-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #3156a3, #718bd0);
+            color: #fff;
+            font-size: 55px;
+            font-weight: 700;
+            box-shadow: 0 8px 22px rgba(49, 86, 163, 0.22);
+        }
+
+        .author-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .author-name {
+            margin: 0 0 12px;
+            color: #17213b;
+            font-size: 34px;
+            font-weight: 750;
+            letter-spacing: -0.7px;
+        }
+
+        .author-bio {
+            margin: 0;
+            color: #687187;
+            font-size: 15px;
+            line-height: 1.85;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .author-stats {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 23px 0;
+        }
+
+        .author-stat-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 10px 16px;
+            border: 1px solid #e6eaf3;
+            border-radius: 10px;
+            background: #f8faff;
+            color: #687187;
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .author-stat-link strong {
+            color: #3156a3;
+            font-size: 19px;
+        }
+
+        .author-stat-link:hover {
+            background: #edf2ff;
+            border-color: #bdcafa;
+            transform: translateY(-2px);
+        }
+
+        .author-stat-separator {
+            display: none;
+        }
+
+        .follow-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 125px;
+            padding: 12px 27px;
+            border: 1px solid #3156a3;
+            border-radius: 9px;
+            background: #3156a3;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .follow-button:hover {
+            background: #244582;
+            border-color: #244582;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(49, 86, 163, 0.2);
+        }
+
+        .follow-button.following {
+            background: #edf2ff;
+            color: #3156a3;
+            border-color: #cbd7f5;
+        }
+
+        .follow-button.following:hover {
+            background: #ffecec;
+            color: #c03939;
+            border-color: #f1caca;
+        }
+
+        .follow-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-follow {
+            display: inline-flex;
+            align-items: center;
+            padding: 11px 20px;
+            border-radius: 9px;
+            background: #3156a3;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 650;
+            text-decoration: none;
+            transition: 0.2s ease;
+        }
+
+        .login-follow:hover {
+            background: #244582;
+            transform: translateY(-2px);
+        }
+
+        .follow-message {
+            min-height: 18px;
+            margin: 9px 0 0;
+            color: #d32f2f;
+            font-size: 13px;
+        }
+
+        .author-posts-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0 0 24px;
+            color: #17213b;
+            font-size: 27px;
+            font-weight: 750;
+        }
+
+        .author-posts-heading::before {
+            content: "";
+            width: 5px;
+            height: 27px;
+            border-radius: 5px;
+            background: #3156a3;
+        }
+
+        .author-post-card {
+            position: relative;
+            padding: 27px 30px;
+            margin-bottom: 18px;
+            background: #fff;
+            border: 1px solid #e8eaf0;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(20, 25, 50, 0.035);
+            transition: 0.25s ease;
+        }
+
+        .author-post-card:hover {
+            transform: translateY(-3px);
+            border-color: #cbd7f5;
+            box-shadow: 0 10px 25px rgba(20, 25, 50, 0.08);
+        }
+
+        .author-post-card h3 {
+            margin: 0 0 12px;
+            font-size: 21px;
+            line-height: 1.5;
+        }
+
+        .author-post-card h3 a {
+            color: #17213b;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .author-post-card h3 a:hover {
+            color: #3156a3;
+        }
+
+        .author-post-card p {
+            margin: 0 0 16px;
+            color: #687187;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .author-post-date {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 11px;
+            border-radius: 6px;
+            background: #f2f5fb;
+            color: #7b8498;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .author-empty {
+            padding: 45px 25px;
+            border: 1px dashed #ccd4e5;
+            border-radius: 15px;
+            background: #f9faff;
+            color: #687187;
+            text-align: center;
+        }
+
+        .author-empty h3 {
+            margin: 0 0 9px;
+            color: #17213b;
+            font-size: 20px;
+        }
+
+        .author-empty p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        @media (max-width: 650px) {
+            .author-page {
+                margin: 22px auto;
+                padding: 12px;
+            }
+
+            .author-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 22px;
+                padding: 32px 20px;
+                border-radius: 16px;
+            }
+
+            .author-photo,
+            .author-placeholder {
+                width: 125px;
+                height: 125px;
+            }
+
+            .author-placeholder {
+                font-size: 43px;
+            }
+
+            .author-name {
+                font-size: 27px;
+            }
+
+            .author-bio {
+                font-size: 14px;
+            }
+
+            .author-stats {
+                justify-content: center;
+                gap: 8px;
+                margin: 20px 0;
+            }
+
+            .author-stat-link {
+                padding: 9px 11px;
+                font-size: 13px;
+            }
+
+            .author-stat-link strong {
+                font-size: 17px;
+            }
+
+            .author-posts-heading {
+                font-size: 23px;
+            }
+
+            .author-post-card {
+                padding: 21px 18px;
+            }
+
+            .author-post-card h3 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+        <main class="container author-page">
+
+            <section class="author-card">
+
+                <% if (author.profile_image) { %>
+                    <img src="<%= author.profile_image %>" alt="<%= author.name %>" class="author-photo">
+                    <% } else { %>
+                        <div class="author-placeholder">
+                            <%= author.name.charAt(0).toUpperCase() %>
+                        </div>
+                        <% } %>
+
+                            <div class="author-info">
+
+                                <h1 class="author-name">
+                                    <%= author.name %>
+                                </h1>
+
+                                <p class="author-bio">
+                                    <%= author.bio || 'This author has not added a bio yet.' %>
+                                </p>
+
+                                <div class="author-stats">
+
+                                    <a href="/follow/followers/<%= author.id %>" class="author-stat-link">
+                                        <strong id="followersCount">
+                                            <%= followersCount %>
+                                        </strong>
+                                        Followers
+                                    </a>
+
+                                    <span class="author-stat-separator"> | </span>
+
+                                    <a href="/follow/following/<%= author.id %>" class="author-stat-link">
+                                        <strong>
+                                            <%= followingCount %>
+                                        </strong>
+                                        Following
+                                    </a>
+
+                                </div>
+
+                                <% if (currentUser && Number(currentUser.id) !==Number(author.id)) { %>
+
+                                    <button type="button" id="followButton"
+                                        class="follow-button <%= isFollowing ? 'following' : '' %>"
+                                        data-author-id="<%= author.id %>">
+                                        <%= isFollowing ? 'Following' : 'Follow' %>
+                                    </button>
+
+                                    <p id="followMessage" class="follow-message"></p>
+
+                                    <% } else if (!currentUser) { %>
+
+                                        <a href="/auth/login" class="login-follow">
+                                            Login to Follow
+                                        </a>
+
+                                        <% } %>
+
+                            </div>
+
+            </section>
+
+            <section class="author-posts">
+
+                <h2 class="author-posts-heading">Published Articles</h2>
+
+                <% if (posts.length> 0) { %>
+
+                    <% posts.forEach(post=> { %>
+
+                        <article class="author-post-card">
+
+                            <h3>
+                                <a href="/posts/<%= post.slug %>">
+                                    <%= post.title %>
+                                </a>
+                            </h3>
+
+                            <% if (post.excerpt) { %>
+                                <p>
+                                    <%= post.excerpt %>
+                                </p>
+                                <% } %>
+
+                                    <div class="author-post-date">
+                                        <%= new Date(post.created_at).toLocaleDateString('en-IN') %>
+                                    </div>
+
+                        </article>
+
+                        <% }); %>
+
+                            <% } else { %>
+
+                                <div class="author-empty">
+                                    <h3>No published articles yet.</h3>
+                                    <p>This author hasn't published any stories yet.</p>
+                                </div>
+
+                                <% } %>
+
+            </section>
+
+        </main>
+
+        <script src="/js/follow.js"></script>
+
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>

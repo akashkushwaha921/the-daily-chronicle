@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore category stories on The Daily Chronicle.">
+
+    <title>
+        <%= title %>
+    </title>
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+        <main class="container">
+
+            <!-- CATEGORY HERO -->
+            <section class="hero">
+                <p class="eyebrow">EXPLORE OUR COMMUNITY</p>
+
+                <h1>
+                    <%= category.replace(/-/g, ' ' ).replace(/\b\w/g, char=> char.toUpperCase()) %>
+                        <br>
+                        <span>Stories & Moments.</span>
+                </h1>
+
+                <p class="hero-copy">
+                    Discover amazing stories, photos and experiences shared by our community.
+                </p>
+
+                <a href="/" class="read-more">← Back to Home</a>
+            </section>
+
+            <!-- CATEGORY POSTS -->
+            <section class="section">
+
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">COMMUNITY STORIES</p>
+                        <h2>Category Posts</h2>
+                    </div>
+
+                    <div class="category-sort">
+                        <span>
+                            <%= posts.length %> Posts
+                        </span>
+
+                        <form method="GET" action="/categories/<%= category %>">
+                            <select name="sort" onchange="this.form.submit()">
+                                <option value="latest" <%=sort==='latest' ? 'selected' : '' %>>
+                                    Latest First
+                                </option>
+
+                                <option value="oldest" <%=sort==='oldest' ? 'selected' : '' %>>
+                                    Oldest First
+                                </option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+
+
+                <% if (posts && posts.length> 0) { %>
+
+                    <div class="posts-grid">
+
+                        <% posts.forEach(post=> { %>
+
+                            <article class="post-card">
+
+                                <div class="post-content">
+
+                                    <% if (post.category_name) { %>
+                                        <span class="post-category">
+                                            <%= post.category_name %>
+                                        </span>
+                                        <% } %>
+
+                                            <h3>
+                                                <%= post.title %>
+                                            </h3>
+
+                                            <p>
+                                                <%= post.excerpt || 'Discover this story on The Daily Chronicle.' %>
+                                            </p>
+
+                                            <div class="post-meta">
+
+                                                <span>
+                                                    By <%= post.author_name || 'Community Author' %>
+                                                </span>
+
+                                                <span>
+                                                    <%= post.published_at ? new
+                                                        Date(post.published_at).toLocaleDateString('en-IN') : '' %>
+                                                </span>
+
+                                            </div>
+
+                                            <a class="read-more" href="/posts/<%= post.slug %>">
+                                                Read Story →
+                                            </a>
+
+                                </div>
+
+                            </article>
+
+                            <% }) %>
+
+                    </div>
+
+                    <% } else { %>
+
+                        <div class="empty-state">
+                            <h3>No posts in this category yet!</h3>
+
+                            <p>
+                                Be the first to share an amazing story in this category.
+                            </p>
+
+                            <a href="/posts/new" class="button">Write a Post →</a>
+                        </div>
+
+                        <% } %>
+
+            </section>
+
+        </main>
+
+        <%- include('../partials/footer') %>
+
+            <script src="/js/main.js"></script>
+
+</body>
+
+</html>

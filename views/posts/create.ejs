@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Story | The Daily Chronicle</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+        <main class="create-post-page">
+            <div class="create-post-container">
+
+                <div class="create-post-heading">
+                    <span class="create-post-label">THE DAILY CHRONICLE</span>
+                    <h1>Create Your Story</h1>
+                    <p>Share your thoughts, experiences and stories with our community.</p>
+                </div>
+
+                <% if (error) { %>
+                    <div class="form-error">
+                        <%= error %>
+                    </div>
+                    <% } %>
+
+                        <form action="/posts" method="POST" enctype="multipart/form-data" class="create-post-form">
+
+                            <div class="create-post-main">
+                                <div class="create-post-card">
+                                    <div class="create-post-section-heading">
+                                        <h2>Story Details</h2>
+                                        <p>Give your story a title and introduction.</p>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="title">Post Title</label>
+                                        <input type="text" id="title" name="title" maxlength="200"
+                                            value="<%= formData.title || '' %>" placeholder="Enter your post title"
+                                            required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="excerpt">Short Description</label>
+                                        <textarea id="excerpt" name="excerpt" rows="3" maxlength="500"
+                                            placeholder="Write a short introduction..."><%= formData.excerpt || '' %></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="content">Your Story</label>
+                                        <textarea id="content" name="content" rows="16"
+                                            placeholder="Start writing your story..."
+                                            required><%= formData.content || '' %></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <aside class="create-post-sidebar">
+
+                                <div class="create-post-card">
+                                    <div class="create-post-section-heading">
+                                        <h2>Publish Details</h2>
+                                        <p>Organize your story.</p>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="category_id">Category</label>
+                                        <select id="category_id" name="category_id">
+                                            <option value="">Choose a category (optional)</option>
+
+                                            <% categories.forEach(category=> { %>
+                                                <option value="<%= category.id %>" <%=String(formData.category_id || ''
+                                                    )===String(category.id) ? 'selected' : '' %>>
+                                                    <%= category.name %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="create-post-card">
+                                    <div class="create-post-section-heading">
+                                        <h2>Featured Photos</h2>
+                                        <p>Add photos to your story.</p>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="images">Upload Photos</label>
+
+                                        <input type="file" id="images" name="images"
+                                            accept="image/jpeg,image/png,image/gif,image/webp,image/avif" multiple>
+
+                                        <small>Up to 100 photos. Maximum 5 MB per photo.</small>
+
+                                        <div id="imageCount" style="margin-top:8px;"></div>
+
+                                        <div id="imagePreview"
+                                            style="display:flex; flex-wrap:wrap; gap:15px; margin-top:15px;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="create-post-submit">
+                                    <button type="submit" class="button">Submit Post</button>
+                                    <p>Your post will be submitted for admin approval.</p>
+                                </div>
+
+                            </aside>
+                        </form>
+            </div>
+        </main>
+
+        <script src="/js/photo-preview.js" defer></script>
+
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>

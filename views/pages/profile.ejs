@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        <%= title %> | The Daily Chronicle
+    </title>
+
+    <style>
+        /* =====================================
+   PROFESSIONAL USER PROFILE DESIGN
+===================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f3f6fb;
+            color: #263b56;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 45px auto;
+            padding: 20px;
+        }
+
+        .profile-card {
+            background: #ffffff;
+            border: 1px solid #e5eaf1;
+            border-radius: 20px;
+            padding: 38px;
+            box-shadow: 0 10px 35px rgba(25, 45, 75, 0.07);
+        }
+
+        /* Profile Header */
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #edf2ff, #f8faff);
+            border: 1px solid #e4eaf5;
+            border-radius: 15px;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #29466f;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: 700;
+            margin: 0 auto 17px;
+            object-fit: cover;
+            border: 5px solid #ffffff;
+            box-shadow: 0 5px 18px rgba(30, 50, 80, 0.15);
+        }
+
+        .profile-header h1 {
+            margin-bottom: 9px;
+            color: #182b45;
+            font-size: 30px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .muted {
+            color: #8491a3;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* Messages */
+
+        .message {
+            padding: 14px 16px;
+            border-radius: 9px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .error {
+            background: #fff0f0;
+            color: #a32626;
+            border: 1px solid #ffdada;
+        }
+
+        .success {
+            background: #eaf8ee;
+            color: #16753a;
+            border: 1px solid #d0eed9;
+        }
+
+        /* Section Headings */
+
+        .section-title {
+            margin: 28px 0 20px;
+            color: #1d3555;
+            font-size: 21px;
+            font-weight: 700;
+            padding-bottom: 13px;
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #e9edf3;
+            margin: 32px 0;
+        }
+
+        /* Forms */
+
+        .form-group {
+            margin-bottom: 23px;
+        }
+
+        .profile-card label {
+            display: block;
+            margin-bottom: 9px;
+            color: #263b56;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-card input:not([type="checkbox"]),
+        .profile-card textarea {
+            display: block;
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #dce3ec;
+            border-radius: 9px;
+            background: #fbfcfe;
+            color: #263b56;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .profile-card textarea {
+            min-height: 125px;
+            resize: vertical;
+            line-height: 1.7;
+        }
+
+        .profile-card input:focus,
+        .profile-card textarea:focus {
+            border-color: #29466f;
+            box-shadow: 0 0 0 3px rgba(41, 70, 111, 0.09);
+            background: #ffffff;
+        }
+
+        .profile-card input:disabled {
+            background: #f0f3f7;
+            color: #758398;
+            cursor: not-allowed;
+        }
+
+        .photo-input {
+            margin-bottom: 12px;
+            background: #f8faff !important;
+            border: 1px dashed #b9c7d9 !important;
+            padding: 12px !important;
+        }
+
+        .photo-help {
+            font-size: 12px;
+            color: #8491a3;
+            margin-top: 9px;
+            line-height: 1.6;
+        }
+
+        /* Profile Photo Preview */
+
+        .preview {
+            display: none;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 18px auto;
+            border: 4px solid #e5eaf1;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Character Counter */
+
+        .character-count {
+            text-align: right;
+            font-size: 12px;
+            color: #8491a3;
+            margin-top: 8px;
+        }
+
+        /* Buttons */
+
+        .save-btn,
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 13px 23px;
+            border: none;
+            border-radius: 9px;
+            background: #29466f;
+            color: #ffffff;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .save-btn:hover {
+            background: #1d3555;
+            transform: translateY(-1px);
+        }
+
+        .back-btn {
+            background: #edf1f6;
+            color: #40536d;
+            margin-left: 9px;
+        }
+
+        .back-btn:hover {
+            background: #dfe6ef;
+        }
+
+        /* Mobile Responsive */
+
+        @media (max-width: 650px) {
+            .container {
+                margin: 15px auto;
+                padding: 12px;
+            }
+
+            .profile-card {
+                padding: 22px 17px;
+                border-radius: 14px;
+            }
+
+            .profile-header {
+                padding: 25px 12px;
+                margin-bottom: 25px;
+            }
+
+            .profile-header h1 {
+                font-size: 25px;
+            }
+
+            .avatar {
+                width: 105px;
+                height: 105px;
+                font-size: 34px;
+            }
+
+            .section-title {
+                font-size: 19px;
+            }
+
+            .save-btn,
+            .back-btn {
+                width: 100%;
+                margin: 0 0 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="profile-card">
+
+            <div class="profile-header">
+
+                <% if (user.profile_image) { %>
+                    <img src="<%= user.profile_image %>" alt="Profile Photo" class="avatar" id="currentAvatar">
+                    <% } else { %>
+                        <div class="avatar" id="currentAvatar">
+                            <%= (user.name || 'U' ).charAt(0).toUpperCase() %>
+                        </div>
+                        <% } %>
+
+                            <h1>
+                                <%= user.name %>
+                            </h1>
+
+                            <p class="muted">Manage Your Account</p>
+
+            </div>
+
+            <% if (error) { %>
+                <div class="message error">
+                    <%= error %>
+                </div>
+                <% } %>
+
+                    <% if (success) { %>
+                        <div class="message success">
+                            <%= success %>
+                        </div>
+                        <% } %>
+
+                            <!-- PROFILE PHOTO -->
+
+                            <h2 class="section-title">Profile Photo</h2>
+
+                            <form action="/profile/upload" method="POST" enctype="multipart/form-data">
+
+                                <div class="form-group">
+                                    <label for="profileImage">Choose Profile Photo</label>
+
+                                    <input type="file" id="profileImage" name="profileImage"
+                                        accept="image/jpeg,image/png,image/webp" class="photo-input" required>
+
+                                    <img id="imagePreview" class="preview" alt="New photo preview">
+
+                                    <p class="photo-help">
+                                        JPG, PNG or WEBP. Maximum file size: 5 MB.
+                                    </p>
+                                </div>
+
+                                <button type="submit" class="save-btn">Upload Photo</button>
+
+                            </form>
+
+                            <hr class="divider">
+
+                            <!-- PERSONAL INFORMATION -->
+
+                            <form action="/profile/update" method="POST">
+
+                                <h2 class="section-title">Personal Information</h2>
+
+                                <div class="form-group">
+                                    <label for="name">Full Name</label>
+                                    <input type="text" id="name" name="name" value="<%= user.name %>" maxlength="120"
+                                        required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" name="email" value="<%= user.email %>"
+                                        maxlength="255" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="bio">About Me / Bio</label>
+
+                                    <textarea id="bio" name="bio" maxlength="500"
+                                        placeholder="Write something about yourself..."><%= user.bio || '' %></textarea>
+
+                                    <p class="character-count">
+                                        <span id="bioCount">
+                                            <%= (user.bio || '' ).length %>
+                                        </span>/500 characters
+                                    </p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="role">Account Role</label>
+                                    <input type="text" id="role" value="<%= user.role %>" disabled>
+                                </div>
+
+                                <hr class="divider">
+
+                                <!-- CHANGE PASSWORD -->
+
+                                <h2 class="section-title">Change Password</h2>
+
+                                <p class="muted" style="margin-bottom:18px;">
+                                    Leave both password fields empty if you don't want to change your password.
+                                </p>
+
+                                <div class="form-group">
+                                    <label for="currentPassword">Current Password</label>
+                                    <input type="password" id="currentPassword" name="currentPassword"
+                                        autocomplete="current-password">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="newPassword">New Password</label>
+                                    <input type="password" id="newPassword" name="newPassword" minlength="8"
+                                        autocomplete="new-password">
+                                </div>
+
+                                <button type="submit" class="save-btn">Save Changes</button>
+
+                                <a href="/dashboard" class="back-btn">Back to Dashboard</a>
+
+                            </form>
+
+        </div>
+    </div>
+
+    <script>
+        // Bio character counter
+        const bioInput = document.getElementById('bio');
+        const bioCount = document.getElementById('bioCount');
+
+        bioInput.addEventListener('input', () => {
+            bioCount.textContent = bioInput.value.length;
+        });
+
+        // Profile photo preview
+        const profileInput = document.getElementById('profileImage');
+        const imagePreview = document.getElementById('imagePreview');
+
+        profileInput.addEventListener('change', () => {
+            const file = profileInput.files[0];
+
+            if (!file) {
+                imagePreview.style.display = 'none';
+                return;
+            }
+
+            if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+                alert('Please select a JPG, PNG or WEBP image.');
+                profileInput.value = '';
+                imagePreview.style.display = 'none';
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Image size must be less than 5 MB.');
+                profileInput.value = '';
+                imagePreview.style.display = 'none';
+                return;
+            }
+
+            imagePreview.src = URL.createObjectURL(file);
+            imagePreview.style.display = 'block';
+        });
+    </script>
+
+</body>
+
+</html>

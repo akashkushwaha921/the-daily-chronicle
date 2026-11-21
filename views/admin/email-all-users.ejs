@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %> | The Daily Chronicle
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        .email-users-page {
+            max-width: 750px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .email-users-page h1 {
+            margin-bottom: 10px;
+        }
+
+        .email-users-page p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .email-users-page label {
+            display: block;
+            margin: 18px 0 8px;
+            font-weight: 600;
+        }
+
+        .email-users-page input,
+        .email-users-page textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font: inherit;
+            box-sizing: border-box;
+        }
+
+        .email-users-page textarea {
+            min-height: 220px;
+            resize: vertical;
+        }
+
+        .email-users-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 22px;
+            flex-wrap: wrap;
+        }
+
+        .email-users-actions button,
+        .email-users-actions a {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .email-users-actions button {
+            background: #1f4e79;
+            color: #fff;
+        }
+
+        .email-users-actions a {
+            background: #eee;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include('../partials/header') %>
+
+        <main class="email-users-page">
+            <h1>Email All Users</h1>
+
+            <% if (success) { %>
+                <div style="
+                    background: #e8f5e9;
+                    color: #2e7d32;
+                    padding: 12px 15px;
+                    border-radius: 6px;
+                    margin: 15px 0;
+                ">
+                    Email successfully sent to all registered users.
+                </div>
+                <% } %>
+
+            <p>
+                Send one email to all registered users.
+                Their email addresses will remain private.
+            </p>
+
+            <form action="/admin/email-all" method="POST">
+
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+                <label for="subject">Email Subject</label>
+                <input type="text" id="subject" name="subject" maxlength="150" required
+                    placeholder="Enter email subject">
+
+                <label for="message">Message</label>
+                <textarea id="message" name="message" maxlength="10000" required
+                    placeholder="Write your message here..."></textarea>
+
+                <div class="email-users-actions">
+                    <button type="submit">
+                        Send to All Users
+                    </button>
+
+                    <a href="/admin/users">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+        </main>
+
+        <%- include('../partials/footer') %>
+
+</body>
+
+</html>

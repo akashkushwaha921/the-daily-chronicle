@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        <%= title %> | The Daily Chronicle
+    </title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        /* SIDEBAR - ORIGINAL DESIGN */
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+            background: #f4f6fa;
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            background: #172033;
+            color: white;
+            padding: 30px 20px;
+        }
+
+        .admin-brand {
+            font-size: 20px;
+            font-weight: 800;
+            line-height: 1.5;
+            margin-bottom: 40px;
+        }
+
+        .admin-brand span {
+            color: #e0a84f;
+        }
+
+        .sidebar-label {
+            color: #929caf;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-link {
+            display: block;
+            color: #dce2ed;
+            text-decoration: none;
+            padding: 13px 15px;
+            border-radius: 7px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: #293750;
+            color: #ffffff;
+        }
+
+        .admin-logout {
+            margin-top: 35px;
+        }
+
+        .admin-logout button {
+            width: 100%;
+            border: 1px solid #46536b;
+            background: transparent;
+            color: white;
+            padding: 12px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .admin-logout button:hover {
+            background: #293750;
+        }
+
+        /* MAIN DASHBOARD */
+
+        .admin-main {
+            flex: 1;
+            min-width: 0;
+            padding: 35px;
+        }
+
+        .admin-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .admin-topbar h1 {
+            font-size: 28px;
+            color: #172033;
+            margin: 0 0 7px;
+        }
+
+        .admin-topbar p {
+            color: #778196;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .admin-user {
+            color: #293750;
+            font-weight: 600;
+            font-size: 14px;
+            background: white;
+            border: 1px solid #e8ebf1;
+            padding: 12px 18px;
+            border-radius: 9px;
+        }
+
+
+        .dashboard-welcome {
+            background: linear-gradient(120deg, #eaf0fb, #d9e5f6);
+            border: 1px solid #c6d5ec;
+            border-left: 5px solid #29466f;
+            border-radius: 14px;
+            padding: 28px 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 14px rgba(41, 70, 111, 0.06);
+        }
+
+        .dashboard-welcome h2 {
+            color: #203b63;
+            font-size: 22px;
+            margin: 0 0 9px;
+        }
+
+        .dashboard-welcome p {
+            color: #607492;
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.8;
+        }
+
+        /* STAT CARDS */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            padding: 22px;
+            border-radius: 13px;
+            border: 1px solid #e8ebf1;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.025);
+            transition: 0.25s;
+        }
+
+        /* CLICKABLE DASHBOARD CARDS */
+
+        .stat-card-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .stat-card-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(41, 70, 111, 0.12);
+        }
+
+        .stat-card-link:focus-visible {
+            outline: 3px solid #6489c5;
+            outline-offset: 4px;
+        }
+
+        .stat-card-link .stat-card {
+            height: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 22px rgba(23, 32, 51, 0.07);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .icon-gold {
+            background: #fff5df;
+        }
+
+        .icon-blue {
+            background: #edf3ff;
+        }
+
+        .icon-green {
+            background: #eaf8ef;
+        }
+
+        .icon-orange {
+            background: #fff0e6;
+        }
+
+        .icon-purple {
+            background: #f3edff;
+        }
+
+        .icon-pink {
+            background: #fff0f3;
+        }
+
+        .stat-tag {
+            color: #9aa3b2;
+            font-size: 11px;
+            font-weight: 600;
+            background: #f6f7f9;
+            padding: 6px 9px;
+            border-radius: 20px;
+        }
+
+        .stat-card p {
+            color: #778196;
+            font-size: 13px;
+            margin: 0 0 8px;
+        }
+
+        .stat-card h2 {
+            color: #172033;
+            font-size: 30px;
+            margin: 0;
+            font-weight: 750;
+        }
+
+        /* COMMON SECTION */
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .dashboard-panel {
+            background: #ffffff;
+            border: 1px solid #e8ebf1;
+            border-radius: 13px;
+            padding: 24px;
+            min-width: 0;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.025);
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .panel-heading h2 {
+            font-size: 17px;
+            color: #172033;
+            margin: 0;
+        }
+
+        .panel-heading span {
+            color: #9aa3b2;
+            font-size: 12px;
+        }
+
+        /* ARTICLE ANALYTICS */
+
+        .analytics-content {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .donut-chart {
+            width: 155px;
+            height: 155px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .donut-inner {
+            width: 108px;
+            height: 108px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .donut-inner strong {
+            font-size: 25px;
+            color: #172033;
+        }
+
+        .donut-inner small {
+            font-size: 11px;
+            color: #929caf;
+        }
+
+        .chart-legend {
+            flex: 1;
+            min-width: 130px;
+        }
+
+        .legend-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 17px;
+            font-size: 13px;
+        }
+
+        .legend-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #657086;
+        }
+
+        .legend-value {
+            color: #172033;
+            font-weight: 700;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-green {
+            background: #39a878;
+        }
+
+        .dot-gold {
+            background: #e0a84f;
+        }
+
+        .dot-gray {
+            background: #b8c0cc;
+        }
+
+        /* QUICK OVERVIEW */
+
+        .overview-row {
+            margin-bottom: 20px;
+        }
+
+        .overview-label {
+            display: flex;
+            justify-content: space-between;
+            color: #657086;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .overview-label strong {
+            color: #172033;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 9px;
+            background: #f0f2f5;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 20px;
+        }
+
+        .fill-green {
+            background: #39a878;
+        }
+
+        .fill-gold {
+            background: #e0a84f;
+        }
+
+        .fill-blue {
+            background: #7298d5;
+        }
+
+        /* RECENT ACTIVITY */
+
+        .recent-section {
+            margin-top: 25px;
+            background: white;
+            border: 1px solid #e8ebf1;
+            border-radius: 13px;
+            padding: 24px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.025);
+        }
+
+        .recent-section .panel-heading {
+            margin-bottom: 18px;
+        }
+
+        .recent-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .recent-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 480px;
+        }
+
+        .recent-table th {
+            text-align: left;
+            padding: 13px 12px;
+            background: #f8f9fb;
+            color: #778196;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .recent-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #f0f1f4;
+            color: #48546a;
+            font-size: 13px;
+        }
+
+        .recent-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .recent-table td:first-child {
+            color: #172033;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .status-published {
+            background: #eaf8ef;
+            color: #268454;
+        }
+
+        .status-pending {
+            background: #fff5df;
+            color: #b17b22;
+        }
+
+        .status-draft {
+            background: #edf1f6;
+            color: #657086;
+        }
+
+        .empty-state {
+            color: #929caf;
+            text-align: center;
+            padding: 25px 10px;
+            font-size: 13px;
+        }
+
+        /* NAVY BLUE LINE CHART */
+
+        .line-chart {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .line-chart svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            overflow: visible;
+        }
+
+        .line-chart-labels {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+            color: #8994a7;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        .chart-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #edf0f5;
+            margin-top: 20px;
+            padding-top: 15px;
+            color: #778196;
+            font-size: 13px;
+        }
+
+        .chart-summary strong {
+            color: #29466f;
+            font-size: 20px;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        @media (max-width: 650px) {
+            .admin-layout {
+                flex-direction: column;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .admin-sidebar {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 20px;
+            }
+
+            .admin-brand {
+                margin-bottom: 20px;
+            }
+
+            .admin-main {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 22px 15px;
+            }
+
+            .admin-topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 13px;
+            }
+
+            .dashboard-welcome {
+                padding: 20px;
+            }
+
+            .dashboard-panel,
+            .recent-section {
+                padding: 18px;
+                box-sizing: border-box;
+            }
+
+            .analytics-content {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    
+    <%- include('../partials/header') %>
+
+        <% const totalPosts=Number(stats.posts) || 0; const published=Number(stats.published) || 0; const
+            pending=Number(stats.pending) || 0; const otherPosts=Math.max(0, totalPosts - published - pending); const
+            publishedPercent=totalPosts ? (published / totalPosts) * 100 : 0; const pendingPercent=totalPosts ? (pending
+            / totalPosts) * 100 : 0; const otherPercent=totalPosts ? (otherPosts / totalPosts) * 100 : 0; const
+            userCount=Number(stats.users) || 0; const commentCount=Number(stats.comments) || 0; const
+            categoryCount=Number(stats.categories) || 0; %>
+
+
+            <div class="admin-layout">
+
+                <!-- SIDEBAR - UNCHANGED -->
+                <aside class="admin-sidebar">
+
+                    <div class="admin-brand">
+                        THE DAILY
+                        <span>CHRONICLE</span>
+                        <div style="font-size: 12px; color: #aab4c5; font-weight: 400;">
+                            ADMIN PANEL
+                        </div>
+                    </div>
+
+                    <p class="sidebar-label">Main Menu</p>
+
+                    <a href="/admin" class="sidebar-link active">
+                        📊 Dashboard
+                    </a>
+
+                    <a href="/admin/articles" class="sidebar-link">
+                        📰 Manage Articles
+                    </a>
+
+                    <a href="/admin/users" class="sidebar-link">
+                        <span>👥</span>
+                        <span>Manage Users</span>
+                    </a>
+
+                    <a href="/admin/comments" class="sidebar-link">
+                        <span>💬</span>
+                        <span>Manage Comments</span>
+                    </a>
+
+                    <a href="/admin/categories" class="sidebar-link">
+                        <span>📁</span>
+                        <span>Manage Categories</span>
+                    </a>
+
+                    <a href="/admin/reports" class="sidebar-link">
+                        <span>🚩</span>
+                        <span>Manage Reports</span>
+                    </a>
+
+                    <a href="/notifications" class="sidebar-link">
+                        <span>🔔</span>
+                        <span>Notifications</span>
+                        <% if (typeof unreadNotificationCount !=='undefined' && unreadNotificationCount> 0) { %>
+                            <span
+                                style="background:#dc2626; color:white; padding:2px 7px; border-radius:20px; font-size:11px; margin-left:5px;">
+                                <%= unreadNotificationCount %>
+                            </span>
+                            <% } %>
+                    </a>
+
+                    <a href="/" class="sidebar-link">
+                        📰 Visit Website
+                    </a>
+
+                    <form action="/auth/logout" method="POST" class="admin-logout">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit">Logout</button>
+                    </form>
+
+                </aside>
+
+                <!-- MAIN CONTENT -->
+                <main class="admin-main">
+
+                    <header class="admin-topbar">
+
+                        <div>
+                            <h1>Dashboard Overview</h1>
+                            <p>Monitor your website's performance and activity.</p>
+                        </div>
+
+                        <div class="admin-user">
+                            Welcome, <%= currentUser.name %>
+                        </div>
+
+                    </header>
+
+                    <!-- WELCOME -->
+                    <section class="dashboard-welcome">
+                        <h2>Welcome back, <%= currentUser.name %>! 👋</h2>
+                        <p>
+                            Here's what's happening on The Daily Chronicle.
+                            Keep track of your users, articles and website activity.
+                        </p>
+                    </section>
+                    <!-- STATISTICS CARDS -->
+                    <section class="stats-grid">
+
+                        <a href="/admin/users" class="stat-card-link">
+                            <div class="stat-card">
+                                <div class="stat-top">
+                                    <div class="stat-icon icon-blue">👥</div>
+                                    <span class="stat-tag">COMMUNITY</span>
+                                </div>
+                                <p>Total Users</p>
+                                <h2>
+                                    <%= userCount.toLocaleString('en-IN') %>
+                                </h2>
+                            </div>
+                        </a>
+
+                        <a href="/admin/articles" class="stat-card-link">
+                            <div class="stat-card">
+                                <div class="stat-top">
+                                    <div class="stat-icon icon-gold">📰</div>
+                                    <span class="stat-tag">CONTENT</span>
+                                </div>
+                                <p>Total Articles</p>
+                                <h2>
+                                    <%= totalPosts.toLocaleString('en-IN') %>
+                                </h2>
+                            </div>
+                        </a>
+
+                        <a href="/admin/articles?status=published" class="stat-card-link">
+                            <div class="stat-card">
+                                <div class="stat-top">
+                                    <div class="stat-icon icon-green">✅</div>
+                                    <span class="stat-tag">LIVE</span>
+                                </div>
+                                <p>Published Articles</p>
+                                <h2>
+                                    <%= published.toLocaleString('en-IN') %>
+                                </h2>
+                            </div>
+                        </a>
+
+                        <a href="/admin/articles?status=pending" class="stat-card-link">
+                            <div class="stat-card">
+                                <div class="stat-top">
+                                    <div class="stat-icon icon-orange">⏳</div>
+                                    <span class="stat-tag">REVIEW</span>
+                                </div>
+                                <p>Pending Articles</p>
+                                <h2>
+                                    <%= pending.toLocaleString('en-IN') %>
+                                </h2>
+                            </div>
+                        </a>
+
+                        <a href="/admin/comments" class="stat-card-link">
+                            <div class="stat-card">
+                                <div class="stat-top">
+                                    <div class="stat-icon icon-purple">💬</div>
+                                    <span class="stat-tag">ENGAGEMENT</span>
+                                </div>
+                                <p>Total Comments</p>
+                                <h2>
+                                    <%= commentCount.toLocaleString('en-IN') %>
+                                </h2>
+                            </div>
+                        </a>
+
+                        <a href="/admin/categories" class="stat-card-link">
+                            <div class="stat-card">
+                                <div class="stat-top">
+                                    <div class="stat-icon icon-pink">📂</div>
+                                    <span class="stat-tag">ORGANIZATION</span>
+                                </div>
+                                <p>Total Categories</p>
+                                <h2>
+                                    <%= categoryCount.toLocaleString('en-IN') %>
+                                </h2>
+                            </div>
+                        </a>
+
+                    </section>
+
+                    <!-- ANALYTICS -->
+                    <section class="dashboard-grid">
+
+                        <!-- ARTICLE STATUS CHART -->
+
+                        <div class="dashboard-panel">
+
+                            <div class="panel-heading">
+                                <h2>Article Analytics</h2>
+                                <span>Last 7 days</span>
+                            </div>
+
+                            <% const graphData=weeklyPosts || []; const graphValues=graphData.map(item=>
+                                Number(item.total)
+                                || 0);
+                                const maxValue = Math.max(...graphValues, 1);
+                                const chartPoints = graphValues.map((value, index) => {
+                                const x = graphValues.length > 1
+                                ? 35 + (index * 330 / (graphValues.length - 1))
+                                : 200;
+                                const y = 145 - (value / maxValue) * 115;
+                                return { x, y, value };
+                                });
+                                const linePoints = chartPoints.map(point => `${point.x},${point.y}`).join(' ');
+                                %>
+
+                                <div class="line-chart">
+
+                                    <svg viewBox="0 0 400 190" width="100%" role="img"
+                                        aria-label="Articles created during the last seven days">
+
+                                        <line x1="30" y1="30" x2="370" y2="30" stroke="#edf0f5" stroke-width="1" />
+
+                                        <line x1="30" y1="85" x2="370" y2="85" stroke="#edf0f5" stroke-width="1" />
+
+                                        <line x1="30" y1="145" x2="370" y2="145" stroke="#edf0f5" stroke-width="1" />
+
+                                        <polyline points="<%= linePoints %>" fill="none" stroke="#6489c5"
+                                            stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+
+                                        <% chartPoints.forEach(point=> { %>
+                                            <circle cx="<%= point.x %>" cy="<%= point.y %>" r="5" fill="#6489c5"
+                                                stroke="#ffffff" stroke-width="2" />
+                                            <% }) %>
+
+                                    </svg>
+
+                                    <div class="line-chart-labels">
+                                        <% graphData.forEach(item=> { %>
+                                            <span>
+                                                <%= new Date(item.date).toLocaleDateString('en-IN', { day: 'numeric' ,
+                                                    month: 'short' , timeZone: 'UTC' }) %>
+                                            </span>
+                                            <% }) %>
+                                    </div>
+
+                                </div>
+
+                                <div class="chart-summary">
+                                    <span>Articles created in last 7 days</span>
+                                    <strong>
+                                        <%= graphValues.reduce((sum, value)=> sum + value, 0) %>
+                                    </strong>
+                                </div>
+
+                        </div>
+
+
+                        <!-- WEBSITE OVERVIEW -->
+                        <div class="dashboard-panel">
+
+                            <div class="panel-heading">
+                                <h2>Website Overview</h2>
+                                <span>Overall statistics</span>
+                            </div>
+
+                            <div class="overview-row">
+
+                                <div class="overview-label">
+                                    <span>Published Articles</span>
+                                    <strong>
+                                        <%= published %>
+                                    </strong>
+                                </div>
+
+                                <div class="progress-track">
+                                    <div class="progress-fill fill-green"
+                                        style="width: <%= totalPosts ? publishedPercent : 0 %>%;">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="overview-row">
+
+                                <div class="overview-label">
+                                    <span>Pending Articles</span>
+                                    <strong>
+                                        <%= pending %>
+                                    </strong>
+                                </div>
+
+                                <div class="progress-track">
+                                    <div class="progress-fill fill-gold"
+                                        style="width: <%= totalPosts ? pendingPercent : 0 %>%;">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="overview-row">
+
+                                <div class="overview-label">
+                                    <span>Other Articles</span>
+                                    <strong>
+                                        <%= otherPosts %>
+                                    </strong>
+                                </div>
+
+                                <div class="progress-track">
+                                    <div class="progress-fill fill-blue"
+                                        style="width: <%= totalPosts ? otherPercent : 0 %>%;">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="overview-row">
+                                <div class="overview-label">
+                                    <span>Total Community Members</span>
+                                    <strong>
+                                        <%= userCount %>
+                                    </strong>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <!-- LATEST ARTICLES -->
+                    <section class="recent-section">
+
+                        <div class="panel-heading">
+                            <h2>📰 Latest Articles</h2>
+                            <span>Recently added content</span>
+                        </div>
+
+                        <% if (latestPosts && latestPosts.length> 0) { %>
+
+                            <div class="recent-table-wrap">
+                                <table class="recent-table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Article Title</th>
+                                            <th>Author</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        <% latestPosts.forEach(post=> { %>
+
+                                            <tr>
+                                                <td>
+                                                    <%= post.title %>
+                                                </td>
+
+                                                <td>
+                                                    <%= post.author_name || 'Unknown' %>
+                                                </td>
+
+                                                <td>
+                                                    <span
+                                                        class="status-badge <%= post.status === 'published' ? 'status-published' : post.status === 'pending' ? 'status-pending' : 'status-draft' %>">
+                                                        <%= post.status %>
+                                                    </span>
+                                                </td>
+
+                                                <td>
+                                                    <%= post.created_at ? new
+                                                        Date(post.created_at).toLocaleDateString('en-IN') : '-' %>
+                                                </td>
+                                            </tr>
+
+                                            <% }) %>
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                            <% } else { %>
+
+                                <div class="empty-state">
+                                    No articles available yet.
+                                </div>
+
+                                <% } %>
+
+                    </section>
+
+                    <!-- LATEST USERS -->
+                    <section class="recent-section">
+
+                        <div class="panel-heading">
+                            <h2>👥 Latest Registered Users</h2>
+                            <span>Recently joined members</span>
+                        </div>
+
+                        <% if (latestUsers && latestUsers.length> 0) { %>
+
+                            <div class="recent-table-wrap">
+                                <table class="recent-table">
+
+                                    <thead>
+                                        <tr>
+                                            <th>User Name</th>
+                                            <th>Email Address</th>
+                                            <th>Joined On</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                        <% latestUsers.forEach(user=> { %>
+
+                                            <tr>
+                                                <td>
+                                                    <%= user.name %>
+                                                </td>
+
+                                                <td>
+                                                    <%= user.email %>
+                                                </td>
+
+                                                <td>
+                                                    <%= user.created_at ? new
+                                                        Date(user.created_at).toLocaleDateString('en-IN') : '-' %>
+                                                </td>
+                                            </tr>
+
+                                            <% }) %>
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+
+                            <% } else { %>
+
+                                <div class="empty-state">
+                                    No users registered yet.
+                                </div>
+
+                                <% } %>
+
+                    </section>
+
+                </main>
+
+            </div>
+            <%- include('../partials/footer') %>
+</body>
+
+</html>
