@@ -1,3 +1,18 @@
+﻿<script>
+  // The shared header is also used by fragment-style EJS pages without a head.
+  // Ensure mobile browsers use the device viewport on every rendered page.
+  (function () {
+    if (!document.querySelector('meta[name="viewport"]')) {
+      var viewport = document.createElement('meta');
+      viewport.name = 'viewport';
+      viewport.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
+      document.head.appendChild(viewport);
+    }
+  })();
+</script>
+<link rel="icon" type="image/x-icon" href="/favicon.ico?v=1">
+<link rel="stylesheet" href="/css/style.css">
+
 <header class="site-header">
   <div class="nav container">
 
@@ -41,24 +56,18 @@
 
           </a>
 
-          <a class="nav-link" href="/dashboard">
-            Dashboard
-          </a>
+          <a class="nav-link" href="/dashboard">Dashboard</a>
 
           <a class="nav-link" href="/notifications">
             Notifications
-
-            <% if ( typeof unreadNotificationCount !=='undefined' && unreadNotificationCount> 0
-              ) { %>
+            <% if (typeof unreadNotificationCount !=='undefined' && unreadNotificationCount> 0) { %>
               <span class="notification-count">
                 <%= unreadNotificationCount %>
               </span>
               <% } %>
           </a>
 
-          <a class="nav-cta" href="/posts/new">
-            Write Post
-          </a>
+          <a class="nav-cta" href="/posts/new">Write Post</a>
 
           <form action="/auth/logout" method="POST" class="logout-form">
             <button type="submit" class="logout-button">
@@ -68,17 +77,9 @@
 
           <% } else { %>
 
-            <a class="nav-link" href="/auth/login">
-              Login
-            </a>
-
-            <a class="nav-cta" href="/auth/register">
-              Register
-            </a>
-
-            <a class="write-post-link" href="/auth/login">
-              Write Post
-            </a>
+            <a class="nav-link" href="/auth/login">Login</a>
+            <a class="nav-cta" href="/auth/register">Register</a>
+            <a class="write-post-link" href="/auth/login">Write Post</a>
 
             <% } %>
 
@@ -89,12 +90,10 @@
 </header>
 
 <% if (currentUser && currentUser.role==='admin' ) { %>
-
   <a href="/admin" class="admin-dashboard-float">
-    <span>▦</span>
+    <span>â–¦</span>
     Admin Dashboard
   </a>
-
   <% } %>
 
     <script src="/js/navigation.js" defer></script>
